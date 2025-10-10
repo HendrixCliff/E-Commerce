@@ -44,6 +44,147 @@ dotnet sln add Ecommerce.API Ecommerce.Application Ecommerce.Domain Ecommerce.In
 
 
 You now have a clean architecture base.
+EcommerceApp.sln        ← Solution file (groups all projects)
+│
+├── Ecommerce.API/       ← ASP.NET Core Web API (Presentation Layer)
+├── Ecommerce.Application/ ← Application Layer (Use Cases / Services)
+├── Ecommerce.Domain/      ← Domain Layer (Entities / Business Logic)
+└── Ecommerce.Infrastructure/ ← Infrastructure Layer (DB, Repositories)
+Command 1:
+dotnet new sln -n EcommerceApp
+
+
+✅ What happened:
+
+You created a Solution file (EcommerceApp.sln).
+
+A solution is like a “container” that organizes multiple projects.
+
+It helps you manage relationships between projects — like your main API, domain library, and data layer.
+
+🔹 Command 2:
+cd EcommerceApp
+
+
+✅ What happened:
+
+You navigated into the solution folder where the .sln file resides.
+
+All subsequent projects you create will go inside this folder (unless you specify otherwise).
+
+🔹 Command 3:
+dotnet new webapi -n Ecommerce.API
+
+
+✅ What happened:
+
+Created a new ASP.NET Core Web API project called Ecommerce.API.
+
+This project acts as your Presentation Layer — it exposes endpoints (controllers) to clients.
+
+It includes:
+
+Controllers/WeatherForecastController.cs
+
+Program.cs & Startup.cs (or minimal hosting model in .NET 6+)
+
+appsettings.json
+
+📁 Output structure:
+
+Ecommerce.API/
+ ├── Controllers/
+ ├── Program.cs
+ ├── appsettings.json
+ ├── Properties/
+ └── Ecommerce.API.csproj
+
+🔹 Command 4:
+dotnet new classlib -n Ecommerce.Application
+
+
+✅ What happened:
+
+Created a Class Library project named Ecommerce.Application.
+
+This is the Application Layer — it contains:
+
+Business use cases
+
+Service interfaces
+
+Application-level DTOs (Data Transfer Objects)
+
+Command and Query Handlers (in CQRS setups)
+
+📁 Output:
+
+Ecommerce.Application/
+ └── Ecommerce.Application.csproj
+
+🔹 Command 5:
+dotnet new classlib -n Ecommerce.Domain
+
+
+✅ What happened:
+
+Created a Domain Layer — the core of your business logic.
+
+This layer is pure C# — no framework dependencies, no EF Core, no web references.
+
+Contains:
+
+Entities
+
+Value Objects
+
+Domain Events
+
+Business Rules (validations, invariants)
+
+📁 Output:
+
+Ecommerce.Domain/
+ └── Ecommerce.Domain.csproj
+
+🔹 Command 6:
+dotnet new classlib -n Ecommerce.Infrastructure
+
+
+✅ What happened:
+
+Created the Infrastructure Layer, where you’ll implement:
+
+EF Core DbContext
+
+Repository Implementations
+
+External service integrations (e.g., email, payment gateways)
+
+File storage, etc.
+
+📁 Output:
+
+Ecommerce.Infrastructure/
+ └── Ecommerce.Infrastructure.csproj
+
+🔹 Command 7:
+dotnet sln add Ecommerce.API Ecommerce.Application Ecommerce.Domain Ecommerce.Infrastructure
+
+
+✅ What happened:
+
+This command adds all four projects to your solution file.
+
+It doesn’t link them together yet — it just registers them under the same solution umbrella.
+
+📁 The solution now knows about:
+
+EcommerceApp.sln
+ ├── Ecommerce.API
+ ├── Ecommerce.Application
+ ├── Ecommerce.Domain
+ └── Ecommerce.Infrastructure
 
 🧩 Step 3: Set Up the Layer References
 
@@ -52,6 +193,19 @@ Each layer should know only what it needs to:
 dotnet add Ecommerce.API reference Ecommerce.Application Ecommerce.Infrastructure Ecommerce.Domain
 dotnet add Ecommerce.Application reference Ecommerce.Domain
 dotnet add Ecommerce.Infrastructure reference Ecommerce.Domain
+
+OR
+
+cd Ecommerce.API
+dotnet add reference ../Ecommerce.Application
+
+cd ../Ecommerce.Application
+dotnet add reference ../Ecommerce.Domain
+
+cd ../Ecommerce.Infrastructure
+dotnet add reference ../Ecommerce.Application
+dotnet add reference ../Ecommerce.Domain
+
 
 
 This structure ensures:
