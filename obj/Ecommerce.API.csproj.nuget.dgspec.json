@@ -35,11 +35,11 @@
               "c:\\Users\\HP\\Ecommerce.Application\\Ecommerce.Application.csproj": {
                 "projectPath": "c:\\Users\\HP\\Ecommerce.Application\\Ecommerce.Application.csproj"
               },
-              "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
-                "projectPath": "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
+              "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
+                "projectPath": "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
               },
-              "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj": {
-                "projectPath": "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj"
+              "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj"
               }
             }
           }
@@ -60,6 +60,18 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "DotNetEnv": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.9, )"
@@ -87,6 +99,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[9.0.6, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.14.0, )"
             }
           },
           "imports": [
@@ -140,8 +156,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
-                "projectPath": "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
+              "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
+                "projectPath": "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
               }
             }
           }
@@ -181,14 +197,14 @@
         }
       }
     },
-    "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
+    "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj",
         "projectName": "Ecommerce.Domain",
-        "projectPath": "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj",
+        "projectPath": "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\HP\\Ecommerce.Domain\\obj\\",
+        "outputPath": "C:\\Users\\HP\\Ecommerce.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -246,14 +262,14 @@
         }
       }
     },
-    "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj": {
+    "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj",
         "projectName": "Ecommerce.Infrastructure",
-        "projectPath": "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\HP\\Ecommerce.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\HP\\Ecommerce.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -274,8 +290,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
-                "projectPath": "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
+              "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
+                "projectPath": "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
               }
             }
           }

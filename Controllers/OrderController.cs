@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Ecommerce.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using Ecommerce.API.Services.Interfaces;
 
 namespace Ecommerce.API.Controllers
 {
@@ -10,9 +11,9 @@ namespace Ecommerce.API.Controllers
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly OrderService _orderService;
+        private readonly IOrderService _orderService;
 
-        public OrderController(OrderService orderService)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
         }
@@ -25,9 +26,9 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var order = _orderService.GetByIdAsync(id);
+            var order =  await _orderService.GetByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -39,14 +40,14 @@ namespace Ecommerce.API.Controllers
         public async Task<IActionResult> Create(Order order)
         {
             var created = await _orderService.CreateAsync(order);
-            return CreatedAtAction(nameof(Create), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Order updated)
         {
             var success = await _orderService.UpdateAsync(id, updated);
-            if (success == null) {
+            if (!success) {
                 return NotFound();
             }
             return NoContent();
@@ -55,7 +56,7 @@ namespace Ecommerce.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) {
            var success = await _orderService.DeleteAsync(id);
-           if (success == null) {
+           if (!success) {
                 return NotFound();
             }
             return NoContent();

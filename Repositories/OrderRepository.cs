@@ -18,14 +18,17 @@ namespace Ecommerce.API.Repositories
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await _context.Orders
-            .Include(o => o.Items).ThenInclude(i => i.Product)
-            .AsNoTracking().ToListAsync();
+            .Include(o => o.Items)
+            .ThenInclude(i => i.Product)
+            .AsNoTracking()
+            .ToListAsync();
         }
 
         public async Task<Order?> GetByIdAsync(int id)
         {
             return await _context.Orders
-            .Include(o => o.Items).ThenInclude(i => i.Product)
+            .Include(o => o.Items)
+            .ThenInclude(i => i.Product)
             .FirstOrDefaultAsync(o => o.Id == id);
 
         }

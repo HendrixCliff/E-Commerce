@@ -267,6 +267,9 @@ app.MapOpenApi();
 
 ✅ automatically generate an OpenAPI/Swagger spec file, not a UI.
 
+dotnet add package DotNetEnv
+For using the .env file
+
 That’s why when you go to
 👉 http://localhost:5063/swagger
 you get a 404 — because the UI isn’t mapped yet.
@@ -350,6 +353,7 @@ Fix	Install Swashbuckle	Add UseSwaggerUI()
 So:
 ✅ You’re on .NET 8 (using AddOpenApi())
 ✅ You just need to add Swashbuckle.AspNetCore and UseSwaggerUI() to get your Swagger web page back.
+
 
 
 Nice — great controller to teach from. I’ll walk you through every bit (from ActionResult down to the smallest details), explain what each line/construct does, call out pitfalls, and finish with a safer, production-friendly controller you can drop into your project. 🔨🤖🔧
@@ -1157,3 +1161,7 @@ AsNoTracking() for read-only queries; FindAsync() returns tracked entity used fo
 SaveChangesAsync() is when the DB write occurs.
 
 Use DTOs, validation, transactions, and concurrency handling in production.
+
+JWT Authentication & Authorization (optional next step)
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add package System.IdentityModel.Tokens.Jwt

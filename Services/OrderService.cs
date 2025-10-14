@@ -1,11 +1,12 @@
 using Ecommerce.API.Models;
 using Ecommerce.API.Repositories;
 using Ecommerce.API.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Ecommerce.API.Services.Interfaces;
+
 
 namespace Ecommerce.API.Services
 {
-    public class OrderService
+    public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
 

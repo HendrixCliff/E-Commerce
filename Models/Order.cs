@@ -19,8 +19,8 @@ namespace Ecommerce.API.Models
 
         public string Status { get; set; } = "Pending";
 
-     
-        public List<OrderItem>? Items { get; set; }
+
+        public List<OrderItem> Items { get; set; } = new();
     }
 
     public class OrderItem

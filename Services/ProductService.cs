@@ -1,9 +1,10 @@
 using Ecommerce.API.Models;
 using Ecommerce.API.Repositories.Interfaces;
+using Ecommerce.API.Services.Interfaces;
 
 namespace Ecommerce.API.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
 

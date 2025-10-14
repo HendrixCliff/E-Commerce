@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Ecommerce.API.Services;
 using Ecommerce.API.Models;
-
+using Ecommerce.API.Services.Interfaces;
 namespace Ecommerce.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
-        private readonly CartService _service;
+        private readonly ICartService _service;
 
-        public CartController(CartService service)
+        public CartController(ICartService service)
         {
             _service = service;
         }
