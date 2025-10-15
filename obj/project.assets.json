@@ -8342,6 +8342,7 @@
       "Microsoft.EntityFrameworkCore >= 9.0.9",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.9",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.9",
+      "Microsoft.IdentityModel.Tokens >= 8.14.0",
       "Pomelo.EntityFrameworkCore.MySql >= 9.0.0",
       "Swashbuckle.AspNetCore >= 9.0.6",
       "System.IdentityModel.Tokens.Jwt >= 8.14.0"
@@ -8382,11 +8383,11 @@
             "c:\\Users\\HP\\Ecommerce.Application\\Ecommerce.Application.csproj": {
               "projectPath": "c:\\Users\\HP\\Ecommerce.Application\\Ecommerce.Application.csproj"
             },
-            "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
-              "projectPath": "C:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
+            "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj": {
+              "projectPath": "c:\\Users\\HP\\Ecommerce.Domain\\Ecommerce.Domain.csproj"
             },
-            "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj"
+            "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj": {
+              "projectPath": "c:\\Users\\HP\\Ecommerce.Infrastructure\\Ecommerce.Infrastructure.csproj"
             }
           }
         }
@@ -8439,6 +8440,10 @@
             "target": "Package",
             "version": "[9.0.9, )"
           },
+          "Microsoft.IdentityModel.Tokens": {
+            "target": "Package",
+            "version": "[8.14.0, )"
+          },
           "Pomelo.EntityFrameworkCore.MySql": {
             "target": "Package",
             "version": "[9.0.0, )"
@@ -8474,5 +8479,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }

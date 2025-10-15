@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "server=mysqlserver;user=produser;password=secure@123;database=EcommerceDB"
+  }
+}
