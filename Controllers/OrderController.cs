@@ -4,6 +4,7 @@ using Ecommerce.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using Ecommerce.API.Services.Interfaces;
+using Ecommerce.API.DTOs.Order;
 
 namespace Ecommerce.API.Controllers
 {
@@ -37,16 +38,16 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Order order)
+        public async Task<IActionResult> Create(OrderResponseDto dto)
         {
-            var created = await _orderService.CreateAsync(order);
+            var created = await _orderService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Order updated)
+        public async Task<IActionResult> Update(int id, UpdateOrderDto dto)
         {
-            var success = await _orderService.UpdateAsync(id, updated);
+            var success = await _orderService.UpdateAsync(id, dto);
             if (!success) {
                 return NotFound();
             }

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Ecommerce.API.Services;
 using Ecommerce.API.Models;
 using Ecommerce.API.Services.Interfaces;
+using Ecommerce.API.DTOs.Cart;
+
 namespace Ecommerce.API.Controllers
 {
     [ApiController]
@@ -33,16 +35,16 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Cart cart)
+        public async Task<IActionResult> Create([FromBody] CreateCartDto dto)
         {
-            var created = await _service.CreateAsync(cart);
+            var created = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Cart updatedCart)
+        public async Task<IActionResult> Update(int id, UpdateCartDto dto)
         {
-            var success = await _service.UpdateAsync(id, updatedCart);
+            var success = await _service.UpdateAsync(id, dto);
             if (!success)
                 return NotFound();
 

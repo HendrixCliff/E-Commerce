@@ -1,3 +1,4 @@
+using Ecommerce.API.DTOs.Order;
 using Ecommerce.API.Models;
 using Ecommerce.API.Repositories;
 using Ecommerce.API.Repositories.Interfaces;
@@ -9,42 +10,100 @@ namespace Ecommerce.API.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+         private readonly IProductRepository _productRepository;
 
-        public OrderService(OrderRepository orderRepository)
+
+        public OrderService(IProductRepository productRepository, OrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public async Task<IEnumerable<OrderResponseDto>> GetAllAsync()
         {
-            return await _orderRepository.GetAllAsync();
+           var orders = await _orderRepository.GetAllAsync();
+
+            return orders.Select(o => new OrderResponseDto
+            {
+                Id = o.Id,
+                UserId = o.UserId,
+                CreatedAt = o.CreatedAt,
+                Status = o.Status,
+                TotalAmount = o.TotalAmount,
+                Items = o.Items.Select(i => new OrderItemResponseDto
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.Product?.Name ?? string.Empty,
+                    Price = i.Product?.Price ?? 0,
+                    Quantity = i.Quantity
+                }).ToList()
+            });
         }
 
-        public async Task<Order?> GetByIdAsync(int id)
+        public async Task<OrderResponseDto?> GetByIdAsync(int id)
         {
-            return await _orderRepository.GetByIdAsync(id);
+            var order = await _orderRepository.GetByIdAsync(id);
+            if (order == null) return null;
+
+            return new OrderResponseDto
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                CreatedAt = order.CreatedAt,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+                Items = order.Items.Select(i => new OrderItemResponseDto
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.Product?.Name ?? string.Empty,
+                    Price = i.Product?.Price ?? 0,
+                    Quantity = i.Quantity
+                }).ToList()
+            };
         }
 
-        public async Task<Order> CreateAsync(Order order)
+        public async Task<OrderResponseDto> CreateAsync(CreateOrderDto dto)
         {
-            order.OrderDate = DateTime.UtcNow;
-            order.Status = "Pending";
+            var order = new Order
+            {
+                UserId = dto.UserId,
+                CreatedAt = DateTime.UtcNow,
+                Status = "Pending",
+                Items = new List<OrderItem>()
+            };
+
+            decimal total = 0;
+
+            foreach (var item in dto.Items)
+            {
+                var product = await _productRepository.GetByIdAsync(item.ProductId);
+                if (product == null) throw new Exception($"Product with ID {item.ProductId} not found.");
+
+                var orderItem = new OrderItem
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                };
+
+                total += product.Price * item.Quantity;
+                order.Items.Add(orderItem);
+            }
+
+            order.TotalAmount = total;
 
             await _orderRepository.AddAsync(order);
             await _orderRepository.SaveChangesAsync();
 
-            return order;
+            return await GetByIdAsync(order.Id) ?? throw new Exception("Order not found after creation");
         }
 
-        public async Task<bool> UpdateAsync(int id, Order updateOrder)
+        public async Task<bool> UpdateAsync(int id, UpdateOrderDto dto)
         {
-            var existingOrder = await _orderRepository.GetByIdAsync(id);
-            if (existingOrder == null) return false;
+           var order = await _orderRepository.GetByIdAsync(dto.Id);
+            if (order == null) return false;
 
-            existingOrder.Status = updateOrder.Status;
-            existingOrder.TotalAmount = updateOrder.TotalAmount;
-
-            await _orderRepository.UpdateAsync(existingOrder);
+            order.Status = dto.Status;
+            await _orderRepository.UpdateAsync(order);
             await _orderRepository.SaveChangesAsync();
 
             return true;
@@ -53,8 +112,8 @@ namespace Ecommerce.API.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var order = await _orderRepository.GetByIdAsync(id);
-           if (order == null) return false;
+               var order = await _orderRepository.GetByIdAsync(id);
+            if (order == null) return false;
 
             await _orderRepository.DeleteAsync(order);
             await _orderRepository.SaveChangesAsync();
