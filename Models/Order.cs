@@ -12,7 +12,7 @@ namespace Ecommerce.API.Models
         public int UserId { get; set; } 
 
         [Required]
-        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
         public decimal TotalAmount { get; set; }
