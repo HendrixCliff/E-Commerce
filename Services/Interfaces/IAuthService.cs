@@ -1,10 +1,12 @@
-using Ecommerce.API.Models;
+using Ecommerce.API.DTOs.Auth;
 
 namespace Ecommerce.API.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> RegisterAsync(string email, string password);
-        Task<string> LoginAsync(string email, string password);
+        Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto);
+        Task<AuthResponseDto> LoginAsync(LoginRequestDto dto);
+        Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto dto);
+        Task<bool> ResetPasswordAsync(ResetPasswordRequestDto dto);
     }
 }

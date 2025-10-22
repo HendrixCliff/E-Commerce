@@ -1,12 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BCrypt.Net;
+using Ecommerce.API.DTOs.Auth;
 using Ecommerce.API.Models;
 using Ecommerce.API.Repositories.Interfaces;
 using Ecommerce.API.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using BCrypt.Net;
 
 namespace Ecommerce.API.Services
 {
@@ -14,64 +15,99 @@ namespace Ecommerce.API.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
-
-        public AuthService(IUserRepository userRepository, IConfiguration config)
+        private readonly IEmailService _emailService;
+        public AuthService(IUserRepository userRepository, IConfiguration config, IEmailService emailService)
         {
             _userRepository = userRepository;
             _config = config;
+            _emailService = emailService;
         }
 
-        public async Task<string> RegisterAsync(string email, string password)
+        public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(email);
-            if (existingUser != null)
+            var existing = await _userRepository.GetByEmailAsync(dto.Email);
+            if (existing != null)
                 throw new Exception("User already exists");
 
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-
-            var user = new User
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            var newUser = new User
             {
-                Email = email,
-                PasswordHash = hashedPassword,
-                Role = "Customer"
+                Email = dto.Email,
+                PasswordHash = hashedPassword
             };
 
-            await _userRepository.AddAsync(user);
+            await _userRepository.AddAsync(newUser);
             await _userRepository.SaveChangesAsync();
 
-            return GenerateJwtToken(user);
+            var token = GenerateJwtToken(newUser);
+            return new AuthResponseDto { Token = token, Email = newUser.Email };
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+        public async Task<AuthResponseDto> LoginAsync(LoginRequestDto dto)
         {
-            var user = await _userRepository.GetByEmailAsync(email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-                throw new Exception("Invalid credentials");
+            var user = await _userRepository.GetByEmailAsync(dto.Email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+                throw new UnauthorizedAccessException("Invalid credentials");
 
-            return GenerateJwtToken(user);
+            var token = GenerateJwtToken(user);
+            return new AuthResponseDto { Token = token, Email = user.Email };
         }
 
         private string GenerateJwtToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var jwtKey = _config["Jwt:Key"];
+            var jwtIssuer = _config["Jwt:Issuer"];
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim("id", user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
             var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
+                issuer: jwtIssuer,
+                audience: jwtIssuer,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+          public async Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto dto)
+        {
+            var user = await _userRepository.GetByEmailAsync(dto.Email);
+            if (user == null)
+                throw new Exception("User not found");
+
+            // Generate token
+            var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            user.PasswordResetToken = token;
+            user.ResetTokenExpiry = DateTime.UtcNow.AddMinutes(15);
+
+            await _userRepository.SaveChangesAsync();
+
+            // Normally you send this token by email, but for now:
+            return token;
+        }
+          public async Task<bool> ResetPasswordAsync(ResetPasswordRequestDto dto)
+        {
+            var user = (await _userRepository.GetAllAsync())
+                .FirstOrDefault(u => u.PasswordResetToken == dto.Token && u.ResetTokenExpiry > DateTime.UtcNow);
+
+            if (user == null)
+                throw new Exception("Invalid or expired reset token");
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            user.PasswordResetToken = null;
+            user.ResetTokenExpiry = null;
+
+            await _userRepository.SaveChangesAsync();
+            return true;
         }
     }
 }

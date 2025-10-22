@@ -7,7 +7,7 @@ namespace Ecommerce.API.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
 
         [Required]
@@ -15,5 +15,9 @@ namespace Ecommerce.API.Models
 
         [Required]
         public string Role { get; set; } = "Customer";
+
+       
+        public string? PasswordResetToken { get; set; }
+        public DateTime? ResetTokenExpiry { get; set; }
     }
 }

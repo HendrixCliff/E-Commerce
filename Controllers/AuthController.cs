@@ -1,3 +1,4 @@
+using Ecommerce.API.DTOs.Auth;
 using Ecommerce.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,20 +16,31 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
-            var token = await _authService.RegisterAsync(request.Email, request.Password);
-            return Ok(new { Token = token });
+            var response = await _authService.RegisterAsync(request);
+            return Ok(response);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var token = await _authService.LoginAsync(request.Email, request.Password);
-            return Ok(new { Token = token });
+            var response = await _authService.LoginAsync(request);
+            return Ok(response);
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
+        {
+            var token = await _authService.ForgotPasswordAsync(dto);
+            return Ok(new { Message = "Password reset token generated.", Token = token });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)
+        {
+            var success = await _authService.ResetPasswordAsync(dto);
+            return success ? Ok("Password reset successful") : BadRequest("Invalid token");
         }
     }
-
-    public record RegisterRequest(string Email, string Password);
-    public record LoginRequest(string Email, string Password);
 }

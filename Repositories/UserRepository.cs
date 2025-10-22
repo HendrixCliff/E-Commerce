@@ -14,6 +14,9 @@ namespace Ecommerce.API.Repositories
             _context = context;
         }
 
+       public async Task<IEnumerable<User>> GetAllAsync()
+         => await _context.Users.ToListAsync();
+
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
