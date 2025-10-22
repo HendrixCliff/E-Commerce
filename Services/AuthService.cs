@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
 using BCrypt.Net;
 using Ecommerce.API.DTOs.Auth;
 using Ecommerce.API.Models;

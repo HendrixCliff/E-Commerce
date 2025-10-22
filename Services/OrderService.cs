@@ -13,7 +13,7 @@ namespace Ecommerce.API.Services
          private readonly IProductRepository _productRepository;
 
 
-        public OrderService(IProductRepository productRepository, OrderRepository orderRepository)
+        public OrderService(IProductRepository productRepository, IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;

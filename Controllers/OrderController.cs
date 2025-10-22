@@ -38,7 +38,7 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OrderResponseDto dto)
+        public async Task<IActionResult> Create(CreateOrderDto dto)
         {
             var created = await _orderService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
