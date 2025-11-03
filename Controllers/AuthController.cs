@@ -29,12 +29,13 @@ namespace Ecommerce.API.Controllers
             return Ok(response);
         }
 
-        [HttpPost("forgot-password")]
+      [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
         {
-            var token = await _authService.ForgotPasswordAsync(dto);
-            return Ok(new { Message = "Password reset token generated.", Token = token });
+            await _authService.ForgotPasswordAsync(dto);
+            return Ok(new { Message = "If your email exists in our system, a reset link has been sent." });
         }
+
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)

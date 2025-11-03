@@ -6,7 +6,7 @@ namespace Ecommerce.API.Services.Interfaces
     {
         Task<AuthResponseDto> RegisterAsync(RegisterRequestDto dto);
         Task<AuthResponseDto> LoginAsync(LoginRequestDto dto);
-        Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto dto);
+        Task ForgotPasswordAsync(ForgotPasswordRequestDto dto);
         Task<bool> ResetPasswordAsync(ResetPasswordRequestDto dto);
     }
 }

@@ -15,7 +15,7 @@ namespace Ecommerce.API.Data
         public DbSet<OrderItem> OrderItems { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
-
+      
         public DbSet<User> Users { get; set; }
          
     }

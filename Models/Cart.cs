@@ -13,8 +13,7 @@ namespace Ecommerce.API.Models
 
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
-
-        // Optional: if you have user authentication
+        
         public int? UserId { get; set; } 
     }
 }

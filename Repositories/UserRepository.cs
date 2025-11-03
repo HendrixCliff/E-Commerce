@@ -32,6 +32,12 @@ namespace Ecommerce.API.Repositories
             await _context.Users.AddAsync(user);
         }
 
+        public async Task UpdateAsync( User user)
+        {
+            _context.Users.Update( user);
+            await Task.CompletedTask;
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

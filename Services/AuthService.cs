@@ -41,7 +41,11 @@ namespace Ecommerce.API.Services
             await _userRepository.SaveChangesAsync();
 
             var token = GenerateJwtToken(newUser);
-            return new AuthResponseDto { Token = token, Email = newUser.Email };
+            return new AuthResponseDto
+            {
+                Token = token,
+                Email = newUser.Email
+            };
         }
 
         public async Task<AuthResponseDto> LoginAsync(LoginRequestDto dto)
@@ -79,22 +83,27 @@ namespace Ecommerce.API.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-          public async Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto dto)
-        {
-            var user = await _userRepository.GetByEmailAsync(dto.Email);
-            if (user == null)
-                throw new Exception("User not found");
 
-            // Generate token
-            var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-            user.PasswordResetToken = token;
-            user.ResetTokenExpiry = DateTime.UtcNow.AddMinutes(15);
 
-            await _userRepository.SaveChangesAsync();
+   public async Task ForgotPasswordAsync(ForgotPasswordRequestDto dto)
+{
+    var user = await _userRepository.GetByEmailAsync(dto.Email);
+    if (user == null) return;
 
-            // Normally you send this token by email, but for now:
-            return token;
-        }
+    var token = Guid.NewGuid().ToString();
+    user.PasswordResetToken = token;
+    user.ResetTokenExpiry = DateTime.UtcNow.AddHours(1);
+
+    await _userRepository.UpdateAsync(user);
+    await _userRepository.SaveChangesAsync();
+
+    var resetLink = $"https://yourfrontend.com/reset-password?token={token}&email={dto.Email}";
+    await _emailService.SendEmailAsync(dto.Email, "Reset Your Password",
+        $"Click the link to reset your password: {resetLink}");
+}
+
+
+
           public async Task<bool> ResetPasswordAsync(ResetPasswordRequestDto dto)
         {
             var user = (await _userRepository.GetAllAsync())
